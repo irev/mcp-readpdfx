@@ -1,5 +1,11 @@
 # ReadPDFx - OCR PDF MCP Server
 
+<div align="center">
+
+![ReadPDFx Logo](./logo.png)
+
+</div>
+
 > **Production-ready MCP Protocol 2025-06-18 compliant server for OCR PDF processing**
 
 [![MCP Protocol](https://img.shields.io/badge/MCP-2025--06--18-blue)](https://github.com/irev/mcp-readpdfx)

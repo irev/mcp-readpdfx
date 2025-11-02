@@ -10,10 +10,14 @@ import asyncio
 import logging
 import sys
 import json
+import os
+from pathlib import Path
 from typing import Dict, Any, Optional
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 # Import MCP components
 from .mcp_server import MCPServer
@@ -72,16 +76,78 @@ class MCPServerRunner:
         # Health check
         @self.app.get("/")
         async def root():
-            return {
-                "name": "OCR PDF MCP Server",
-                "version": "1.0.0",
-                "protocol": "MCP 2025-06-18",
-                "status": "running"
-            }
+            """Root endpoint with proper HTML and favicon"""
+            html_content = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>ReadPDFx - OCR PDF MCP Server</title>
+                <link rel="icon" type="image/x-icon" href="/favicon.ico">
+                <meta charset="utf-8">
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+                    .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                    .logo { text-align: center; margin-bottom: 30px; }
+                    .logo img { max-width: 200px; height: auto; }
+                    h1 { color: #333; text-align: center; }
+                    .info { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                    .endpoints { background: #f3e5f5; padding: 15px; border-radius: 5px; }
+                    .endpoint { margin: 5px 0; font-family: monospace; }
+                    a { color: #1976d2; text-decoration: none; }
+                    a:hover { text-decoration: underline; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="logo">
+                        <img src="/logo.png" alt="ReadPDFx Logo" />
+                    </div>
+                    <h1>ReadPDFx - OCR PDF MCP Server</h1>
+                    
+                    <div class="info">
+                        <strong>Status:</strong> Running<br>
+                        <strong>Version:</strong> 1.0.0<br>
+                        <strong>Protocol:</strong> MCP 2025-06-18<br>
+                        <strong>Repository:</strong> <a href="https://github.com/irev/mcp-readpdfx" target="_blank">github.com/irev/mcp-readpdfx</a>
+                    </div>
+                    
+                    <div class="endpoints">
+                        <h3>Available Endpoints:</h3>
+                        <div class="endpoint">• <a href="/health">GET /health</a> - Health check</div>
+                        <div class="endpoint">• <a href="/docs">GET /docs</a> - API documentation</div>
+                        <div class="endpoint">• POST /mcp/initialize - Initialize MCP session</div>
+                        <div class="endpoint">• POST /mcp/tools/list - List available tools</div>
+                        <div class="endpoint">• POST /mcp/tools/call - Call MCP tools</div>
+                        <div class="endpoint">• GET /mcp/manifest - Get MCP manifest</div>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            return HTMLResponse(content=html_content)
         
         @self.app.get("/health")
         async def health():
             return {"status": "healthy", "timestamp": "2025-01-12T11:00:00Z"}
+        
+        # Static files - favicon and logo
+        @self.app.get("/favicon.ico")
+        async def favicon():
+            """Serve favicon.ico"""
+            favicon_path = Path(__file__).parent.parent / "favicon.ico"
+            if favicon_path.exists():
+                return FileResponse(favicon_path, media_type="image/x-icon")
+            else:
+                raise HTTPException(status_code=404, detail="Favicon not found")
+        
+        @self.app.get("/logo.png")
+        async def logo():
+            """Serve logo.png"""
+            logo_path = Path(__file__).parent.parent / "logo.png"
+            if logo_path.exists():
+                return FileResponse(logo_path, media_type="image/png")
+            else:
+                raise HTTPException(status_code=404, detail="Logo not found")
         
         # MCP Protocol endpoints
         @self.app.post("/mcp/initialize")
