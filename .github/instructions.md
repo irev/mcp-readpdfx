@@ -4,6 +4,9 @@
 
 ReadPDFx adalah MCP (Model Context Protocol) server production-ready untuk OCR PDF processing yang mengikuti standar MCP Protocol 2025-06-18.
 
+standard referensi: https://modelcontextprotocol.io/docs/develop/build-server 
+semua harus berdasar referensi
+
 **Repository**: https://github.com/irev/mcp-readpdfx
 
 ## 🏗️ Project Structure
@@ -56,6 +59,21 @@ python scripts/run_server.py --dev
 python -m pytest tests/
 ```
 
+## MCP Server Endpoints
+The MCP server exposes the following endpoints:
+- `POST /mcp/initialize`   - MCP Initialize
+- `POST /mcp/tools/list`   - MCP List Tools
+- `POST /mcp/tools/call`   - MCP Call Tool
+- `POST /call`             - LM Studio Tool Call
+- `POST /<tool_name>`      - Direct Tool Call
+- `POST /jsonrpc`          - JSON-RPC 2.0
+- `WS   /ws`               - WebSocket connection
+- `GET  /events`           - LM Studio SSE Stream
+- `GET  /stream`           - Alternative Stream
+- `GET  /sse/tools`        - SSE Tools Stream
+- `GET  /sse/status`       - SSE Status Stream
+- `GET  /tools`            - Tools Discovery
+
 ## 🛠️ Development Guidelines
 
 ### Code Style
@@ -87,3 +105,8 @@ seusai dengan MCP Protocol v2025-06-18 dan JSON-RPC 2.0 standards.
 # 📚 OCR PDF MCP - Response Framework Implementation Guide
 ## 🛠️ Overview of Implementation
 This document outlines the implementation of the Response Framework for the OCR PDF MCP server, ensuring compliance with MCP Protocol v2025-06-18, JSON-RPC 2.0, and Server-Sent Events (SSE) specifications.
+
+# Terminal Commands
+To execute terminal commands in Windows, you can use the Command Prompt (cmd) 
+dont use powershell. Here are some examples of how to after run run.py to start the server: using another cmd command.
+

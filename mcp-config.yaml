@@ -37,9 +37,8 @@ transport:
       list: "/mcp/tools/list"
       call: "/mcp/tools/call"
     jsonrpc: "/jsonrpc"
+    manifest: "/mcp/manifest"
     health: "/health"
-    discovery: "/tools"
-    docs: "/docs"
 
 # OCR Configuration
 ocr:

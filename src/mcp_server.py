@@ -14,15 +14,26 @@ from typing import Any, Dict, List, Optional, Union, Callable
 from dataclasses import asdict
 import time
 
-from .mcp_types import (
-    MCP_PROTOCOL_VERSION, MCPServerState, MCPError, MCPRequestId, MCPParams,
-    JSONRPCRequest, JSONRPCResponse, JSONRPCNotification,
-    MCPInitializeRequest, MCPInitializeResponse, MCPCapabilities, MCPImplementation,
-    MCPTool, MCPToolsListResponse, MCPToolCallRequest, MCPToolCallResponse,
-    MCPContent, MCPTextContent, MCPToolResult,
-    create_jsonrpc_response, create_text_content, create_tool_result,
-    validate_protocol_version, validate_jsonrpc_version
-)
+try:
+    from .mcp_types import (
+        MCP_PROTOCOL_VERSION, MCPServerState, MCPError, MCPRequestId, MCPParams,
+        JSONRPCRequest, JSONRPCResponse, JSONRPCNotification,
+        MCPInitializeRequest, MCPInitializeResponse, MCPCapabilities, MCPImplementation,
+        MCPTool, MCPToolsListResponse, MCPToolCallRequest, MCPToolCallResponse,
+        MCPContent, MCPTextContent, MCPToolResult,
+        create_jsonrpc_response, create_text_content, create_tool_result,
+        validate_protocol_version, validate_jsonrpc_version
+    )
+except ImportError:
+    from mcp_types import (
+        MCP_PROTOCOL_VERSION, MCPServerState, MCPError, MCPRequestId, MCPParams,
+        JSONRPCRequest, JSONRPCResponse, JSONRPCNotification,
+        MCPInitializeRequest, MCPInitializeResponse, MCPCapabilities, MCPImplementation,
+        MCPTool, MCPToolsListResponse, MCPToolCallRequest, MCPToolCallResponse,
+        MCPContent, MCPTextContent, MCPToolResult,
+        create_jsonrpc_response, create_text_content, create_tool_result,
+        validate_protocol_version, validate_jsonrpc_version
+    )
 
 # Setup logging
 logger = logging.getLogger(__name__)

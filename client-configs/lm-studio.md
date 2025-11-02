@@ -25,22 +25,20 @@ This configuration enables OCR PDF MCP server integration with LM Studio.
 **Server Name**: `ocr-pdf`
 **Command**: `python`
 **Arguments**:
-```
-D:\AI\MCP\python\ocr_pdf_mcp\run.py
+```json
+["D:/AI/MCP/python/ocr_pdf_mcp/mcp_server_stdio_fixed.py"]
 ```
 
 **Environment Variables**:
 ```
 PYTHONPATH=D:\AI\MCP\python\ocr_pdf_mcp
-MCP_SERVER_HOST=localhost
-MCP_SERVER_PORT=8000
 ```
 
 ### Method 2: HTTP Server Configuration
 
 1. Start the HTTP server:
    ```bash
-   python run_server.py --prod --port 8000
+   python run.py
    ```
 
 2. In LM Studio, configure HTTP connection:

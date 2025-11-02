@@ -1,0 +1,74 @@
+# OCR PDF MCP Server - Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocr-pdf-mcp
+  labels:
+    app: ocr-pdf-mcp
+    version: v1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ocr-pdf-mcp
+  template:
+    metadata:
+      labels:
+        app: ocr-pdf-mcp
+    spec:
+      containers:
+      - name: ocr-pdf-mcp
+        image: ocr-pdf-mcp:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: CORS_ORIGINS
+          value: "*"
+        - name: MCP_SERVER_NAME
+          value: "ocr-pdf-mcp"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        # Optional: Mount volume for PDFs
+        # volumeMounts:
+        # - name: pdf-storage
+        #   mountPath: /app/pdf-test
+        #   readOnly: true
+      # Optional: Volume for PDFs
+      # volumes:
+      # - name: pdf-storage
+      #   persistentVolumeClaim:
+      #     claimName: pdf-storage-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocr-pdf-mcp-service
+  labels:
+    app: ocr-pdf-mcp
+spec:
+  selector:
+    app: ocr-pdf-mcp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

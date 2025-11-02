@@ -1,0 +1,27 @@
+# OCR PDF MCP Server - Kubernetes Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ocr-pdf-mcp-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Content-Type, Authorization"
+spec:
+  tls:
+  - hosts:
+    - your-domain.com  # Replace with your actual domain
+    secretName: ocr-pdf-mcp-tls
+  rules:
+  - host: your-domain.com  # Replace with your actual domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ocr-pdf-mcp-service
+            port:
+              number: 80

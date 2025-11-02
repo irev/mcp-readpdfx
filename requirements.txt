@@ -1,7 +1,8 @@
 # OCR PDF MCP Server v1.0.0 - Production Dependencies
 
-# Core MCP
-mcp>=1.0.0
+# Core MCP SDK (Official)
+mcp[cli]>=1.2.0
+httpx>=0.25.0
 
 # PDF Processing
 PyMuPDF>=1.24.0

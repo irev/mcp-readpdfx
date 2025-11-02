@@ -1,0 +1,4 @@
+Test file for LM Studio OCR MCP Server
+This is a sample text file.
+Language: English and Indonesian
+Bahasa: Bahasa Inggris dan Indonesia

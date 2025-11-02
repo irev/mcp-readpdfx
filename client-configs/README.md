@@ -9,16 +9,10 @@ This guide provides integration instructions for OCR PDF MCP server with various
    pip install -r requirements.txt
    ```
 
-2. **Start Server** (choose one)
+2. **Start Server**
    ```bash
-   # Simple start (production mode)
+   # Start the MCP server (production mode)
    python run.py
-   
-   # Advanced start with options
-   python run_server.py --prod --port 8000
-   
-   # Development mode with debug
-   python run_server.py --dev
    ```
 
 3. **Test Connection**
@@ -63,7 +57,8 @@ Replace `{PATH_TO_PROJECT}` with your actual project path:
     "initialize": "/mcp/initialize",
     "tools_list": "/mcp/tools/list",
     "tools_call": "/mcp/tools/call",
-    "manifest": "/mcp/manifest"
+    "manifest": "/mcp/manifest",
+    "jsonrpc": "/jsonrpc"
   }
 }
 ```

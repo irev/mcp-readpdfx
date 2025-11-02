@@ -1,0 +1,78 @@
+{
+  "name": "ocr-pdf-mcp",
+  "version": "1.0.0",
+  "description": "OCR PDF MCP Server with Indonesian Language Support",
+  "author": "AI Assistant",
+  "license": "MIT",
+  "type": "stdio",
+  "main": "mcp_server_stdio_fixed.py",
+  "requirements": {
+    "python": ">=3.8",
+    "dependencies": [
+      "mcp>=1.2.0",
+      "fastmcp>=0.9.0",
+      "PyMuPDF>=1.23.0",
+      "pytesseract>=0.3.10",
+      "Pillow>=10.0.0"
+    ]
+  },
+  "system_requirements": {
+    "tesseract": {
+      "required": true,
+      "languages": ["eng", "ind"],
+      "install_url": "https://github.com/UB-Mannheim/tesseract/wiki"
+    }
+  },
+  "install": {
+    "steps": [
+      {
+        "type": "dependency_check",
+        "description": "Checking Python dependencies"
+      },
+      {
+        "type": "system_check", 
+        "description": "Checking Tesseract OCR installation"
+      },
+      {
+        "type": "language_check",
+        "description": "Verifying Indonesian language pack"
+      },
+      {
+        "type": "test_server",
+        "description": "Testing server startup"
+      }
+    ]
+  },
+  "capabilities": {
+    "file_upload": true,
+    "supported_formats": [".pdf"],
+    "languages": ["eng", "ind", "eng+ind"],
+    "tools": [
+      "extract_pdf_text",
+      "perform_ocr", 
+      "process_pdf_smart",
+      "analyze_pdf_structure",
+      "list_ocr_languages",
+      "list_uploaded_files",
+      "batch_process_pdfs",
+      "get_server_info"
+    ]
+  },
+  "client_configs": {
+    "lm_studio": {
+      "config_file": "client-configs/lm-studio.md",
+      "command": ["python", "mcp_server_stdio_fixed.py"],
+      "transport": "stdio"
+    },
+    "claude_desktop": {
+      "config_file": "client-configs/claude-desktop.md", 
+      "command": ["python", "mcp_server_stdio_fixed.py"],
+      "transport": "stdio"
+    }
+  },
+  "documentation": {
+    "readme": "README.md",
+    "setup_guide": "LM_STUDIO_FILE_UPLOAD_COMPLETE.md",
+    "changelog": "CHANGELOG.md"
+  }
+}

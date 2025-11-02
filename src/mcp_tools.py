@@ -13,17 +13,27 @@ from typing import Any, Dict, List, Optional, Callable
 from dataclasses import asdict
 import time
 
-from .mcp_types import (
-    MCPTool, MCPToolInputSchema, MCPContent, MCPTextContent, MCPToolResult,
-    create_text_content, create_tool_result, create_tool_result_from_text_list
-)
+try:
+    from .mcp_types import (
+        MCPTool, MCPToolInputSchema, MCPContent, MCPTextContent, MCPToolResult,
+        create_text_content, create_tool_result, create_tool_result_from_text_list
+    )
+except ImportError:
+    from mcp_types import (
+        MCPTool, MCPToolInputSchema, MCPContent, MCPTextContent, MCPToolResult,
+        create_text_content, create_tool_result, create_tool_result_from_text_list
+    )
 
-# Import existing OCR modules from backup
-backup_path = os.path.join(os.path.dirname(__file__), '..', 'backup')
-sys.path.append(backup_path)
-from backup.pdf_text_extractor import PDFTextExtractor
-from backup.ocr_worker import OCRWorker
-from backup.pdf_utils import PDFUtils
+# Import OCR modules from main package  
+import sys
+from pathlib import Path
+project_root = Path(__file__).parent.parent
+ocr_pkg_path = project_root / "ocr_pdf_mcp"
+sys.path.insert(0, str(project_root))
+
+from ocr_pdf_mcp.pdf_text_extractor import PDFTextExtractor
+from ocr_pdf_mcp.ocr_worker import OCRWorker  
+from ocr_pdf_mcp.pdf_utils import PDFUtils
 
 logger = logging.getLogger(__name__)
 

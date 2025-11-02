@@ -24,12 +24,10 @@ Copy the following configuration into your `claude_desktop_config.json`:
     "ocr-pdf": {
       "command": "python",
       "args": [
-        "D:\\AI\\MCP\\python\\ocr_pdf_mcp\\run.py"
+        "D:\\AI\\MCP\\python\\ocr_pdf_mcp\\ocr_mcp_server.py"
       ],
       "env": {
-        "PYTHONPATH": "D:\\AI\\MCP\\python\\ocr_pdf_mcp",
-        "MCP_SERVER_HOST": "localhost",
-        "MCP_SERVER_PORT": "8000"
+        "PYTHONPATH": "D:\\AI\\MCP\\python\\ocr_pdf_mcp"
       }
     }
   }

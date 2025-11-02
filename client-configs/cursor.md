@@ -57,7 +57,7 @@ Add to Cursor settings.json:
 
 1. Start HTTP server:
    ```bash
-   python run_server.py --prod
+   python run.py
    ```
 
 2. Configure Cursor for HTTP:

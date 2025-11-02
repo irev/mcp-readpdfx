@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ocr-pdf": {
+      "command": "python",
+      "args": [
+        "D:\\AI\\MCP\\python\\ocr_pdf_mcp\\mcp_server_stdio_fixed.py"
+      ],
+      "env": {
+        "PYTHONPATH": "D:\\AI\\MCP\\python\\ocr_pdf_mcp"
+      }
+    }
+  }
+}

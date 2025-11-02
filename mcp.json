@@ -12,7 +12,7 @@
   },
   "server": {
     "command": "python",
-    "args": ["mcp_server_runner.py"],
+    "args": ["run.py"],
     "env": {
       "PYTHONPATH": ".",
       "MCP_SERVER_HOST": "localhost", 

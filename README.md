@@ -1,54 +1,58 @@
 # ReadPDFx - OCR PDF MCP Server
 
+> ***Official MCP SDK STDIO Server - MCP Protocol 2025-06-18 Compliant***
 
-> ***MCP Protocol 2025-06-18 compliant server for OCR PDF processing***
-
-
-[![MCP Protocol](https://img.shields.io/badge/MCP-2025--06--18-blue)](https://github.com/irev/mcp-readpdfx)
+[![MCP Protocol](https://img.shields.io/badge/MCP-2025--06--18-blue)](https://modelcontextprotocol.io/)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-green)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Latest-teal)](https://fastapi.tiangolo.com)
+[![MCP SDK](https://img.shields.io/badge/MCP_SDK-Official-blue)](https://github.com/modelcontextprotocol/python-sdk)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
 
 <div align="left" style="display: flex; align-items: center; gap: 20px;">
   <img src="./logo.png" alt="Read_PDF Logo" width="100" style="flex-shrink: 0;">
   <div>
-    ReadPDFx is a comprehensive MCP (Model Context Protocol) server that provides intelligent OCR and PDF processing capabilities. It automatically detects whether a PDF contains digital text or scanned images and applies the appropriate processing method.
+    ReadPDFx is a comprehensive MCP (Model Context Protocol) server that provides intelligent OCR and PDF processing capabilities using the official MCP SDK with STDIO transport. It automatically detects whether a PDF contains digital text or scanned images and applies the appropriate processing method.
   </div>
 </div>
 
-## ⚡ Quick Start
+## ⚡ Quick Start (STDIO Server)
 
 ### 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Run Server
+### 2. Validate Installation
 ```bash
-# Simple production start
-python run.py
-
-# Advanced start with options
-python run_server.py --prod --port 8000
-
-# Development mode
-python run_server.py --dev
+# Test imports and tools
+python validate_tools.py
 ```
 
-### 3. Test Connection
-```bash
-curl http://localhost:8000/health
+### 3. Client Integration
+The server runs via STDIO protocol - configure your MCP client:
+
+**Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "ocr-pdf": {
+      "command": "python",
+      "args": ["d:/AI/MCP/python/ocr_pdf_mcp/mcp_server_stdio.py"],
+      "env": {}
+    }
+  }
+}
 ```
 
 ## 🚀 Features
 
-- **Smart PDF Processing**: Automatically detects digital vs scanned content
-- **MCP Protocol 2025-06-18 Compliant**: Full standard implementation  
-- **Multiple Client Support**: Claude Desktop, LM Studio, Continue.dev, Cursor
-- **HTTP + JSON-RPC**: Multiple connection methods
-- **Production Ready**: Comprehensive error handling and logging
-- **Batch Processing**: Handle multiple files efficiently
-- **OCR Support**: Advanced OCR with Tesseract integration
+- **🎯 Official MCP SDK**: Built with official FastMCP framework
+- **📡 STDIO Transport**: Standard MCP protocol over STDIO
+- **🧠 Smart PDF Processing**: Automatically detects digital vs scanned content
+- **🔧 5 OCR Tools**: Text extraction, OCR processing, combined operations
+- **🌐 Universal Client Support**: Claude Desktop, LM Studio, Continue.dev, Cursor
+- **⚡ Lightweight**: ~200 lines vs 800+ in HTTP implementation
+- **🛡️ Production Ready**: Comprehensive error handling and logging
+- **📋 Auto Tool Registration**: Decorators handle tool discovery
 
 ## 🔧 Installation
 
@@ -223,6 +227,100 @@ PYTHONPATH=.                   # Python path
 - `mcp-config.yaml` - YAML configuration
 - `pyproject.toml` - Python project config
 - `package.json` - Node.js compatibility
+
+## 🐳 Docker & Kubernetes
+
+### Docker Deployment
+
+#### Quick Start with Docker
+```bash
+# Build and run with Docker
+docker build -t ocr-pdf-mcp .
+docker run -p 8000:8000 -v ./pdf-test:/app/pdf-test:ro ocr-pdf-mcp
+
+# Or use Docker Compose
+docker-compose up -d
+```
+
+#### Automated Docker Deployment
+```bash
+# Linux/macOS
+./scripts/docker-deploy.sh run
+
+# Windows
+scripts\docker-deploy.bat run
+```
+
+Available Docker commands:
+- `build` - Build Docker image only
+- `run` - Build and run container (default)
+- `start` - Start container (assumes image exists)
+- `stop` - Stop running container
+- `logs` - Show container logs
+- `clean` - Stop container and remove image
+- `status` - Show container status
+
+### Kubernetes Deployment
+
+#### Deploy to Kubernetes
+```bash
+# Quick deployment
+./scripts/k8s-deploy.sh deploy
+
+# Manual deployment
+kubectl apply -f k8s/ -n ocr-pdf-mcp
+```
+
+#### Kubernetes Resources
+- **Deployment**: `k8s/deployment.yaml` - Main application deployment
+- **Service**: `k8s/deployment.yaml` - Service exposure
+- **Ingress**: `k8s/ingress.yaml` - External access
+- **ConfigMap**: `k8s/configmap.yaml` - Configuration management
+- **HPA**: `k8s/hpa.yaml` - Horizontal Pod Autoscaler
+
+#### Kubernetes Commands
+```bash
+# Scale deployment
+kubectl scale deployment ocr-pdf-mcp --replicas=5 -n ocr-pdf-mcp
+
+# Port forward for local access
+kubectl port-forward svc/ocr-pdf-mcp-service 8000:80 -n ocr-pdf-mcp
+
+# View logs
+kubectl logs -f deployment/ocr-pdf-mcp -n ocr-pdf-mcp
+
+# Check status
+kubectl get pods,svc,ingress -n ocr-pdf-mcp
+```
+
+### Production Considerations
+
+#### Multi-stage Build
+Use `Dockerfile.prod` for optimized production builds:
+```bash
+docker build -f Dockerfile.prod -t ocr-pdf-mcp:prod .
+```
+
+#### Environment Variables
+```bash
+# Docker
+docker run -e LOG_LEVEL=INFO -e CORS_ORIGINS="*" ocr-pdf-mcp
+
+# Kubernetes - update ConfigMap
+kubectl edit configmap ocr-pdf-mcp-config -n ocr-pdf-mcp
+```
+
+#### Persistent Storage
+```yaml
+# Add to deployment.yaml
+volumeMounts:
+- name: pdf-storage
+  mountPath: /app/pdf-test
+volumes:
+- name: pdf-storage
+  persistentVolumeClaim:
+    claimName: pdf-storage-pvc
+```
 
 ## 🧪 Testing
 

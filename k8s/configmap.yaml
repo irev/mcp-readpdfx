@@ -1,0 +1,33 @@
+# OCR PDF MCP Server - ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocr-pdf-mcp-config
+data:
+  LOG_LEVEL: "INFO"
+  CORS_ORIGINS: "*"
+  MCP_SERVER_NAME: "ocr-pdf-mcp"
+  # Add other configuration values as needed
+---
+# OCR PDF MCP Server - Secret (for sensitive data)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ocr-pdf-mcp-secret
+type: Opaque
+data:
+  # Add base64 encoded secrets here if needed
+  # Example: api-key: <base64-encoded-value>
+---
+# Optional: Persistent Volume Claim for PDF storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdf-storage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # storageClassName: fast-ssd  # Uncomment and specify if needed

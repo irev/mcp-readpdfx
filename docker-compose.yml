@@ -1,0 +1,33 @@
+# Docker Compose for OCR PDF MCP Server
+version: '3.8'
+
+services:
+  ocr-pdf-mcp:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=INFO
+      - CORS_ORIGINS=*
+      - MCP_SERVER_NAME=ocr-pdf-mcp
+    volumes:
+      - ./pdf-test:/app/pdf-test:ro
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+
+networks:
+  default:
+    name: ocr-pdf-mcp-network
