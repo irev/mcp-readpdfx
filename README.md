@@ -1,19 +1,20 @@
 # ReadPDFx - OCR PDF MCP Server
 
-<div align="center">
 
-![ReadPDFx Logo](./logo.png)
+> ***MCP Protocol 2025-06-18 compliant server for OCR PDF processing***
 
-</div>
-
-> **Production-ready MCP Protocol 2025-06-18 compliant server for OCR PDF processing**
 
 [![MCP Protocol](https://img.shields.io/badge/MCP-2025--06--18-blue)](https://github.com/irev/mcp-readpdfx)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-green)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Latest-teal)](https://fastapi.tiangolo.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
 
-ReadPDFx is a comprehensive MCP (Model Context Protocol) server that provides intelligent OCR and PDF processing capabilities. It automatically detects whether a PDF contains digital text or scanned images and applies the appropriate processing method.
+<div align="left" style="display: flex; align-items: center; gap: 20px;">
+  <img src="./logo.png" alt="Read_PDF Logo" width="100" style="flex-shrink: 0;">
+  <div>
+    ReadPDFx is a comprehensive MCP (Model Context Protocol) server that provides intelligent OCR and PDF processing capabilities. It automatically detects whether a PDF contains digital text or scanned images and applies the appropriate processing method.
+  </div>
+</div>
 
 ## ⚡ Quick Start
 
