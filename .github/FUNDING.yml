@@ -1,0 +1,11 @@
+# These are supported funding model platforms
+
+github: [irev]
+patreon: readpdfx
+open_collective: readpdfx
+ko_fi: readpdfx
+tidelift: "pypi/readpdfx"
+community_bridge: readpdfx
+liberapay: irev
+issuehunt: irev
+custom: ["https://readpdfx.com/sponsor", "https://buymeacoffee.com/readpdfx"]

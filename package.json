@@ -1,0 +1,49 @@
+{
+  "name": "ocr-pdf-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for OCR PDF processing with comprehensive text extraction and analysis capabilities",
+  "main": "mcp_server_runner.py",
+  "scripts": {
+    "start": "python mcp_server_runner.py",
+    "test": "python test_mcp_server.py",
+    "demo": "python demo.py",
+    "dev": "python mcp_server_runner.py --debug",
+    "install-deps": "pip install -r requirements_new.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/irev/mcp-readpdfx.git"
+  },
+  "keywords": [
+    "mcp",
+    "ocr", 
+    "pdf",
+    "text-extraction",
+    "document-processing",
+    "json-rpc",
+    "fastapi",
+    "tesseract"
+  ],
+  "author": "OCR PDF MCP Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/irev/mcp-readpdfx/issues"
+  },
+  "homepage": "https://github.com/irev/mcp-readpdfx#readme",
+  "engines": {
+    "python": ">=3.8"
+  },
+  "mcp": {
+    "mcpVersion": "2025-06-18",
+    "server": {
+      "command": "python",
+      "args": ["mcp_server_runner.py"]
+    },
+    "capabilities": {
+      "tools": true,
+      "resources": false,
+      "prompts": false,
+      "logging": true
+    }
+  }
+}

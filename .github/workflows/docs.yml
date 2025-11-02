@@ -1,0 +1,142 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'README.md'
+      - 'client-configs/**'
+      - '.github/**'
+      - 'docs/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install documentation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
+
+    - name: Build documentation
+      run: |
+        # Create docs structure if it doesn't exist
+        mkdir -p docs
+        
+        # Copy main documentation files
+        cp README.md docs/index.md
+        cp -r client-configs docs/
+        cp .github/CONTRIBUTING.md docs/contributing.md
+        cp .github/SECURITY.md docs/security.md
+        
+        # Create mkdocs.yml if it doesn't exist
+        if [ ! -f mkdocs.yml ]; then
+          cat > mkdocs.yml << EOF
+        site_name: ReadPDFx Documentation
+        site_description: Production-ready MCP Protocol server for OCR PDF processing
+        site_url: https://irev.github.io/readpdfx
+        repo_url: https://github.com/irev/mcp-readpdfx
+        repo_name: irev/readpdfx
+        
+        theme:
+          name: material
+          palette:
+            - scheme: default
+              primary: blue
+              accent: light blue
+              toggle:
+                icon: material/brightness-7
+                name: Switch to dark mode
+            - scheme: slate
+              primary: blue
+              accent: light blue
+              toggle:
+                icon: material/brightness-4
+                name: Switch to light mode
+          features:
+            - navigation.tabs
+            - navigation.top
+            - search.highlight
+            - content.code.copy
+        
+        plugins:
+          - search
+          - mermaid2
+        
+        nav:
+          - Home: index.md
+          - Client Integration:
+            - Overview: client-configs/README.md
+            - Claude Desktop: client-configs/claude-desktop.md
+            - LM Studio: client-configs/lm-studio.md
+            - Continue.dev: client-configs/continue-dev.md
+            - Cursor: client-configs/cursor.md
+          - Development:
+            - Contributing: contributing.md
+            - Security: security.md
+        
+        markdown_extensions:
+          - pymdownx.highlight:
+              anchor_linenums: true
+              line_spans: __span
+              pygments_lang_class: true
+          - pymdownx.inlinehilite
+          - pymdownx.snippets
+          - pymdownx.superfences:
+              custom_fences:
+                - name: mermaid
+                  class: mermaid
+                  format: !!python/name:pymdownx.superfences.fence_code_format
+          - admonition
+          - pymdownx.details
+          - pymdownx.tabbed:
+              alternate_style: true
+          - attr_list
+          - md_in_html
+        
+        extra:
+          social:
+            - icon: fontawesome/brands/github
+              link: https://github.com/irev/mcp-readpdfx
+            - icon: fontawesome/solid/globe
+              link: https://readpdfx.com
+        EOF
+        fi
+        
+        # Build documentation
+        mkdocs build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site
+        cname: docs.readpdfx.com
+
+    - name: Update README badges
+      run: |
+        # Update documentation badge in README
+        sed -i 's|!\[Documentation\].*|![Documentation](https://img.shields.io/badge/docs-available-brightgreen)|g' README.md
+        
+        # Commit if changes were made
+        if git diff --quiet; then
+          echo "No changes to commit"
+        else
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "docs: update documentation badges [skip ci]"
+          git push
+        fi

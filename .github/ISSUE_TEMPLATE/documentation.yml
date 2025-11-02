@@ -1,0 +1,127 @@
+name: Documentation Update
+description: Request improvements or additions to documentation
+title: "[DOCS] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve ReadPDFx documentation! Please describe what needs to be updated or added.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs updating?
+      options:
+        - README
+        - Client Integration Guides
+        - API Documentation
+        - Installation Guide
+        - Troubleshooting
+        - Code Comments
+        - Examples/Tutorials
+        - Configuration Reference
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-issue
+    attributes:
+      label: Current Issue
+      description: What's wrong with the current documentation?
+      placeholder: |
+        Describe the issue with existing documentation:
+        - Is information missing?
+        - Is something unclear or confusing?
+        - Is information outdated?
+        - Are there errors?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: What would you like to see changed or added?
+      placeholder: |
+        Describe the improvement you'd like to see:
+        - What information should be added?
+        - How should existing content be clarified?
+        - What examples would be helpful?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target-audience
+    attributes:
+      label: Target Audience
+      description: Who is the primary audience for this documentation?
+      options:
+        - End Users
+        - Developers/Contributors
+        - System Administrators
+        - MCP Client Developers
+        - All Users
+    validations:
+      required: true
+
+  - type: textarea
+    id: specific-section
+    attributes:
+      label: Specific Section/File
+      description: Which specific section or file needs updating?
+      placeholder: |
+        Please specify:
+        - File name (e.g., README.md, client-configs/claude-desktop.md)
+        - Section heading
+        - Line numbers if applicable
+
+  - type: checkboxes
+    id: doc-checklist
+    attributes:
+      label: Documentation Checklist
+      description: What aspects should be included? (Check all that apply)
+      options:
+        - label: Step-by-step instructions
+        - label: Code examples
+        - label: Screenshots or diagrams
+        - label: Troubleshooting tips
+        - label: Configuration examples
+        - label: API reference
+        - label: Links to related documentation
+
+  - type: textarea
+    id: proposed-content
+    attributes:
+      label: Proposed Content
+      description: If you have specific content to suggest, please provide it here
+      placeholder: |
+        You can provide:
+        - Draft text
+        - Outline of sections
+        - Example code snippets
+        - Links to reference materials
+
+  - type: checkboxes
+    id: contribution-offer
+    attributes:
+      label: Contribution
+      description: Are you willing to help with this documentation update?
+      options:
+        - label: I can write the documentation
+        - label: I can review and provide feedback
+        - label: I can provide examples or screenshots
+        - label: I can test the documentation with real usage
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about this documentation request?
+      placeholder: |
+        Additional information that might be helpful:
+        - Related issues or discussions
+        - User feedback you've received
+        - Common questions or confusion points

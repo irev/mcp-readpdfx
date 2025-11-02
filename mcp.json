@@ -1,0 +1,313 @@
+{
+  "mcpVersion": "2025-06-18",
+  "name": "ocr-pdf-mcp",
+  "description": "MCP server for OCR PDF processing with comprehensive text extraction and analysis capabilities",
+  "version": "1.0.0",
+  "author": "OCR PDF MCP Team",
+  "license": "MIT",
+  "homepage": "https://github.com/irev/mcp-readpdfx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/irev/mcp-readpdfx.git"
+  },
+  "server": {
+    "command": "python",
+    "args": ["mcp_server_runner.py"],
+    "env": {
+      "PYTHONPATH": ".",
+      "MCP_SERVER_HOST": "localhost", 
+      "MCP_SERVER_PORT": "8000"
+    }
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": true
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    },
+    "logging": {
+      "level": "info"
+    }
+  },
+  "tools": [
+    {
+      "name": "process_pdf_smart",
+      "description": "Intelligently process PDF with automatic detection of digital text vs scanned content. Uses OCR only when necessary.",
+      "category": "pdf_processing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pdf_path": {
+            "type": "string",
+            "description": "Absolute path to the PDF file to process"
+          },
+          "language": {
+            "type": "string",
+            "description": "OCR language code (e.g., 'eng', 'ind', 'eng+ind')",
+            "default": "eng+ind"
+          },
+          "force_ocr": {
+            "type": "boolean",
+            "description": "Force OCR processing even for digital text",
+            "default": false
+          },
+          "include_metadata": {
+            "type": "boolean", 
+            "description": "Include processing metadata in result",
+            "default": true
+          }
+        },
+        "required": ["pdf_path"]
+      }
+    },
+    {
+      "name": "extract_pdf_text",
+      "description": "Extract text from digital PDF documents using built-in text data. Fast processing for PDFs with embedded text.",
+      "category": "pdf_processing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pdf_path": {
+            "type": "string",
+            "description": "Absolute path to the PDF file"
+          },
+          "page_range": {
+            "type": "string",
+            "description": "Page range to extract (e.g., '1-5', '1,3,5', or 'all')",
+            "default": "all"
+          },
+          "preserve_layout": {
+            "type": "boolean",
+            "description": "Attempt to preserve text layout and formatting",
+            "default": true
+          }
+        },
+        "required": ["pdf_path"]
+      }
+    },
+    {
+      "name": "ocr_pdf_pages",
+      "description": "Perform OCR (Optical Character Recognition) on scanned PDF pages. Best for image-based PDFs or when text extraction fails.",
+      "category": "ocr_operations",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pdf_path": {
+            "type": "string",
+            "description": "Absolute path to the PDF file"
+          },
+          "language": {
+            "type": "string",
+            "description": "Tesseract OCR language code",
+            "default": "eng"
+          },
+          "max_workers": {
+            "type": "integer",
+            "description": "Maximum number of parallel OCR workers",
+            "default": 4,
+            "minimum": 1,
+            "maximum": 8
+          },
+          "dpi": {
+            "type": "integer",
+            "description": "Image resolution for OCR processing", 
+            "default": 300,
+            "minimum": 150,
+            "maximum": 600
+          },
+          "page_range": {
+            "type": "string",
+            "description": "Page range to process (e.g., '1-5', '1,3,5', or 'all')",
+            "default": "all"
+          }
+        },
+        "required": ["pdf_path"]
+      }
+    },
+    {
+      "name": "get_pdf_info",
+      "description": "Get comprehensive PDF document information including metadata, page count, text analysis, and OCR recommendations.",
+      "category": "analysis",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pdf_path": {
+            "type": "string",
+            "description": "Absolute path to the PDF file"
+          },
+          "analyze_content": {
+            "type": "boolean",
+            "description": "Perform content analysis (text density, images, etc.)",
+            "default": true
+          },
+          "check_ocr_needed": {
+            "type": "boolean",
+            "description": "Check if OCR processing is recommended",
+            "default": true
+          },
+          "include_sample_text": {
+            "type": "boolean",
+            "description": "Include sample text from first pages",
+            "default": false
+          }
+        },
+        "required": ["pdf_path"]
+      }
+    },
+    {
+      "name": "batch_process_pdfs",
+      "description": "Process multiple PDF files in batch with consistent settings. Useful for processing document collections.",
+      "category": "file_operations",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "input_directory": {
+            "type": "string",
+            "description": "Directory containing PDF files to process"
+          },
+          "output_directory": {
+            "type": "string",
+            "description": "Directory to save processed results"
+          },
+          "processing_mode": {
+            "type": "string",
+            "description": "Processing mode for all files",
+            "enum": ["smart", "extract_only", "ocr_only"],
+            "default": "smart"
+          },
+          "language": {
+            "type": "string",
+            "description": "OCR language for batch processing",
+            "default": "eng+ind"
+          },
+          "file_pattern": {
+            "type": "string", 
+            "description": "File pattern to match (e.g., '*.pdf', 'report_*.pdf')",
+            "default": "*.pdf"
+          },
+          "max_files": {
+            "type": "integer",
+            "description": "Maximum number of files to process",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 1000
+          }
+        },
+        "required": ["input_directory", "output_directory"]
+      }
+    }
+  ],
+  "transport": {
+    "type": "http",
+    "host": "localhost",
+    "port": 8000,
+    "endpoints": {
+      "initialize": "/mcp/initialize",
+      "tools": {
+        "list": "/mcp/tools/list",
+        "call": "/mcp/tools/call"
+      },
+      "jsonrpc": "/jsonrpc",
+      "health": "/health",
+      "discovery": "/tools"
+    }
+  },
+  "dependencies": {
+    "python": ">=3.8",
+    "packages": [
+      "fastapi>=0.104.0",
+      "uvicorn[standard]>=0.24.0",
+      "sse-starlette>=1.6.0",
+      "pydantic>=2.5.0",
+      "aiohttp>=3.9.0",
+      "PyPDF2>=3.0.0",
+      "pdfplumber>=0.9.0",
+      "pdf2image>=1.16.0",
+      "pytesseract>=0.3.10",
+      "Pillow>=10.0.0"
+    ],
+    "system": [
+      "tesseract-ocr"
+    ]
+  },
+  "configuration": {
+    "ocr": {
+      "default_language": "eng+ind",
+      "default_dpi": 300,
+      "max_workers": 4,
+      "supported_languages": [
+        "eng", "ind", "eng+ind", "fra", "deu", "spa", "ita", "por", "rus", "chi_sim", "chi_tra", "jpn", "kor"
+      ]
+    },
+    "pdf": {
+      "max_file_size": "100MB",
+      "supported_formats": ["pdf"],
+      "text_density_threshold": 50
+    },
+    "server": {
+      "timeout": 300,
+      "max_concurrent_requests": 10,
+      "log_level": "INFO"
+    }
+  },
+  "examples": [
+    {
+      "name": "Smart PDF Processing",
+      "description": "Process a PDF document intelligently",
+      "tool": "process_pdf_smart", 
+      "input": {
+        "pdf_path": "/path/to/document.pdf",
+        "language": "eng+ind",
+        "include_metadata": true
+      }
+    },
+    {
+      "name": "Extract Digital Text",
+      "description": "Extract text from a digital PDF",
+      "tool": "extract_pdf_text",
+      "input": {
+        "pdf_path": "/path/to/digital.pdf",
+        "preserve_layout": true
+      }
+    },
+    {
+      "name": "OCR Scanned Document", 
+      "description": "Perform OCR on a scanned PDF",
+      "tool": "ocr_pdf_pages",
+      "input": {
+        "pdf_path": "/path/to/scanned.pdf",
+        "language": "eng",
+        "dpi": 300,
+        "max_workers": 4
+      }
+    },
+    {
+      "name": "Analyze PDF",
+      "description": "Get comprehensive PDF information",
+      "tool": "get_pdf_info",
+      "input": {
+        "pdf_path": "/path/to/document.pdf",
+        "analyze_content": true,
+        "check_ocr_needed": true
+      }
+    },
+    {
+      "name": "Batch Process PDFs",
+      "description": "Process multiple PDFs in a directory",
+      "tool": "batch_process_pdfs",
+      "input": {
+        "input_directory": "/path/to/pdfs/",
+        "output_directory": "/path/to/output/",
+        "processing_mode": "smart",
+        "language": "eng+ind"
+      }
+    }
+  ],
+  "tags": ["ocr", "pdf", "text-extraction", "document-processing", "mcp", "json-rpc"],
+  "keywords": ["OCR", "PDF", "Text Extraction", "Document Processing", "MCP Protocol", "JSON-RPC 2.0"]
+}

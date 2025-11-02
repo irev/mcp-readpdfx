@@ -1,0 +1,134 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocr-pdf-mcp"
+version = "1.0.0"
+description = "MCP server for OCR PDF processing with comprehensive text extraction and analysis capabilities"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "OCR PDF MCP Team", email = "team@example.com"}
+]
+maintainers = [
+    {name = "OCR PDF MCP Team", email = "team@example.com"}
+]
+keywords = ["mcp", "ocr", "pdf", "text-extraction", "document-processing", "json-rpc"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent", 
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: General",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Framework :: FastAPI"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0", 
+    "sse-starlette>=1.6.0",
+    "pydantic>=2.5.0",
+    "aiohttp>=3.9.0",
+    "requests>=2.31.0",
+    "PyPDF2>=3.0.0",
+    "pdfplumber>=0.9.0", 
+    "pdf2image>=1.16.0",
+    "pytesseract>=0.3.10",
+    "Pillow>=10.0.0",
+    "python-multipart>=0.0.6"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.9.0",
+    "flake8>=6.0.0",
+    "mypy>=1.7.0"
+]
+enhanced = [
+    "redis>=5.0.0",
+    "celery>=5.3.0", 
+    "prometheus-client>=0.19.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/irev/mcp-readpdfx"
+Repository = "https://github.com/irev/mcp-readpdfx.git"
+Issues = "https://github.com/irev/mcp-readpdfx/issues"
+Documentation = "https://github.com/irev/mcp-readpdfx#readme"
+
+[project.scripts]
+ocr-pdf-mcp = "mcp_server_runner:main"
+mcp-ocr-server = "mcp_server_runner:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ocr_pdf_mcp*"]
+exclude = ["tests*", "__pycache__*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json", "*.md", "*.txt", "*.yml", "*.yaml"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --tb=short"
+testpaths = [
+    "tests",
+]
+asyncio_mode = "auto"
+
+# MCP Configuration
+[tool.mcp]
+mcpVersion = "2025-06-18"
+name = "ocr-pdf-mcp"
+description = "MCP server for OCR PDF processing"
+version = "1.0.0"
+
+[tool.mcp.server]
+command = "python"
+args = ["mcp_server_runner.py"]
+
+[tool.mcp.capabilities]
+tools = true
+resources = false
+prompts = false
+logging = true
+
+[tool.mcp.transport]
+type = "http"
+host = "localhost"
+port = 8000

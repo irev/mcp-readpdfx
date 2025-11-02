@@ -1,7 +1,8 @@
 # OCR PDF MCP Server v1.0.0 - .gitignore
 # Generated on 2025-11-02
 
-# test files
+# development and test files
+backup
 pdf-test/
 
 # Python

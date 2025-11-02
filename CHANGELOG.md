@@ -9,14 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **HTTP REST API Server** for ML Studio and HTTP client compatibility
+- **LM Studio SSE Support**: Server-Sent Events streaming resolving HTTP 405 errors ✨
 - **ML Studio Integration**: Complete HTTP endpoint support resolving 404 errors
 - **HTTP Server Launcher**: Easy start script with `start_http_server.py`
-- **HTTP Testing Suite**: Automated testing with `test_http_server.py`
+- **HTTP Testing Suite**: Automated testing with `test_http_server.py` and `test_lm_studio.py`
 - **Dual Mode Support**: Both MCP Protocol and HTTP REST API in same package
 - **File Upload Endpoint**: Support for direct PDF file uploads via HTTP
 - **Interactive API Documentation**: Swagger UI and ReDoc interfaces
 - **Health Monitoring**: Dedicated health check endpoints for monitoring
+- **Streaming Endpoints**: SSE events and streaming support for real-time clients
+- **CORS Enhancement**: Complete CORS support with preflight handling
 - **ML Studio Guide**: Comprehensive integration documentation
+- **LM Studio Guide**: HTTP 405 error fix documentation
 
 ### Enhanced
 - **Cross-Client Compatibility**: Supports both MCP clients and HTTP clients
@@ -25,7 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation**: Updated README with dual-mode usage instructions
 
 ### Fixed
-- **ML Studio 404 Issue**: Resolved by implementing proper HTTP endpoints
+- **LM Studio HTTP 405 Error**: Resolved by implementing SSE streaming support ✅
+- **ML Studio 404 Issue**: Resolved by implementing proper HTTP endpoints ✅
+- **CORS Preflight**: Added OPTIONS handler for all endpoints
+- **SSE Streaming**: Server-Sent Events for real-time communication
 - **Type Annotations**: Fixed Optional type hints for HTTP parameters
 - **File Validation**: Enhanced upload file validation and error handling
 

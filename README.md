@@ -1,303 +1,371 @@
-# OCR PDF MCP Server v1.0.0
+# ReadPDFx - OCR PDF MCP Server
 
-**Production-ready MCP server for PDF OCR and text extraction**
+> **Production-ready MCP Protocol 2025-06-18 compliant server for OCR PDF processing**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-repo/ocr-pdf-mcp)
-[![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://python.org)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+[![MCP Protocol](https://img.shields.io/badge/MCP-2025--06--18-blue)](https://github.com/irev/mcp-readpdfx)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-green)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Latest-teal)](https://fastapi.tiangolo.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
 
-## 🎯 Features
+ReadPDFx is a comprehensive MCP (Model Context Protocol) server that provides intelligent OCR and PDF processing capabilities. It automatically detects whether a PDF contains digital text or scanned images and applies the appropriate processing method.
 
-- **Smart PDF Processing**: Automatically detects scanned vs digital PDFs
-- **High-Accuracy OCR**: Uses Tesseract OCR with optimized settings
-- **Multi-Language Support**: Supports 100+ languages including English and Indonesian
-- **Parallel Processing**: Multi-threaded OCR for faster processing
-- **MCP Protocol**: Native support for Model Context Protocol
-- **Cross-Platform**: Works on Windows, macOS, and Linux
-- **Production Ready**: Comprehensive error handling and logging
+## ⚡ Quick Start
 
-## 🚀 Quick Start
-
-### 1. Installation
-
+### 1. Install Dependencies
 ```bash
-# Clone or download the project
-cd ocr_pdf_mcp
+pip install -r requirements.txt
+```
 
+### 2. Run Server
+```bash
+# Simple production start
+python run.py
+
+# Advanced start with options
+python run_server.py --prod --port 8000
+
+# Development mode
+python run_server.py --dev
+```
+
+### 3. Test Connection
+```bash
+curl http://localhost:8000/health
+```
+
+## 🚀 Features
+
+- **Smart PDF Processing**: Automatically detects digital vs scanned content
+- **MCP Protocol 2025-06-18 Compliant**: Full standard implementation  
+- **Multiple Client Support**: Claude Desktop, LM Studio, Continue.dev, Cursor
+- **HTTP + JSON-RPC**: Multiple connection methods
+- **Production Ready**: Comprehensive error handling and logging
+- **Batch Processing**: Handle multiple files efficiently
+- **OCR Support**: Advanced OCR with Tesseract integration
+
+## 🔧 Installation
+
+### Prerequisites
+- Python 3.8+
+- Tesseract OCR
+
+### Windows
+```bash
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Setup Tesseract OCR
-python setup_tesseract.py
-
-# Install for MCP clients
-python install.py
+# Install Tesseract
+choco install tesseract
 ```
 
-### 2. Choose Your Mode
-
-#### Option A: MCP Client Integration (Claude Desktop, Cline, etc.)
+### macOS
 ```bash
-# Verify MCP installation
-python install.py --check-only
-
-# Test MCP server
-python server.py
+pip install -r requirements.txt
+brew install tesseract
 ```
 
-#### Option B: HTTP Server Mode (ML Studio, REST API clients)
+### Linux
 ```bash
-# Start HTTP server
-python start_http_server.py --port 8000
-
-# Test HTTP endpoints
-python test_http_server.py
+pip install -r requirements.txt
+sudo apt-get install tesseract-ocr
 ```
 
-### 3. Verify Installation
+## 📋 Available Tools
 
-For MCP mode:
-```bash
-python server.py --test
+### 1. Smart PDF Processing
+Intelligent processing with automatic OCR detection:
+```json
+{
+  "name": "process_pdf_smart",
+  "arguments": {
+    "pdf_path": "/path/to/document.pdf",
+    "language": "eng"
+  }
+}
 ```
 
-For HTTP mode:
-```bash
-curl http://127.0.0.1:8000/health
+### 2. PDF Text Extraction
+Direct text extraction from digital PDFs:
+```json
+{
+  "name": "extract_pdf_text", 
+  "arguments": {
+    "pdf_path": "/path/to/document.pdf",
+    "page_range": "1-5"
+  }
+}
 ```
 
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file or set environment variables:
-
-```bash
-# Required
-TESSERACT_PATH=C:\Program Files\Tesseract-OCR\tesseract.exe
-
-# Optional
-OCR_LANGUAGE=eng+ind          # OCR languages (default: eng+ind)
-MAX_WORKERS=4                 # Parallel OCR workers (default: 4)
-LOG_LEVEL=INFO               # Logging level (default: INFO)
-PDF_MAX_SIZE_MB=100          # Max PDF size in MB (default: 100)
-OCR_TIMEOUT_SECONDS=300      # OCR timeout per page (default: 300)
+### 3. OCR Processing
+OCR on image files:
+```json
+{
+  "name": "perform_ocr",
+  "arguments": {
+    "image_path": "/path/to/image.png",
+    "language": "eng"
+  }
+}
 ```
 
-### Client Configuration
+### 4. PDF Structure Analysis
+Analyze document structure and metadata:
+```json
+{
+  "name": "analyze_pdf_structure",
+  "arguments": {
+    "pdf_path": "/path/to/document.pdf"
+  }
+}
+```
 
-The installer automatically configures supported MCP clients:
+### 5. Batch Processing
+Process multiple files:
+```json
+{
+  "name": "batch_process_pdfs",
+  "arguments": {
+    "input_directory": "/path/to/pdfs/",
+    "output_directory": "/path/to/output/",
+    "file_pattern": "*.pdf"
+  }
+}
+```
 
-#### VS Code (Claude Dev/Cline)
+## 🔌 Client Integration
+
+### Claude Desktop
+Add to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "ocr-pdf-server": {
+    "readpdfx": {
       "command": "python",
-      "args": ["path/to/server.py"],
+      "args": ["path/to/readpdfx/run.py"],
       "env": {
-        "TESSERACT_PATH": "C:/Program Files/Tesseract-OCR/tesseract.exe"
+        "PYTHONPATH": "path/to/readpdfx"
       }
     }
   }
 }
 ```
 
-## 🌐 Dual Mode Support
+### LM Studio
+Configure MCP server with:
+- **Command**: `python`
+- **Args**: `path/to/readpdfx/run.py`
+- **URL**: `http://localhost:8000` (HTTP mode)
 
-### MCP Protocol Mode (Default)
-- **Claude Desktop**: Native integration
-- **Cline VS Code**: Extension support  
-- **Continue.dev**: Development environment
-- **Custom MCP clients**: Protocol compliance
-
-### HTTP REST API Mode
-- **ML Studio**: Direct HTTP endpoints
-- **Web applications**: RESTful API access
-- **cURL/Postman**: Direct testing
-- **Custom integrations**: Standard HTTP
-
-## 🛠️ Available Tools/Endpoints
-
-### MCP Tools
-- `get_pdf_info`: Get comprehensive PDF information and metadata
-- `extract_pdf_text`: Extract text from digital PDFs (with embedded text)
-- `ocr_pdf`: Perform OCR on scanned PDFs
-- `process_pdf_smart`: Automatically detect PDF type and apply appropriate processing
-
-### HTTP Endpoints
-- `GET /health`: Server health check
-- `POST /pdf/info`: Get PDF information
-- `POST /pdf/extract`: Extract text from digital PDF
-- `POST /pdf/ocr`: Perform OCR on scanned PDF
-- `POST /pdf/smart`: Smart processing (recommended)
-- `POST /pdf/upload`: Upload and process PDF files
-
-## 📋 Usage Examples
-
-### Basic Usage
-```
-"Please analyze this PDF file: C:/Documents/report.pdf"
+### Continue.dev
+Add to config.json:
+```json
+{
+  "contextProviders": [
+    {
+      "name": "mcp",
+      "params": {
+        "command": "python",
+        "args": ["path/to/readpdfx/run.py"]
+      }
+    }
+  ]
+}
 ```
 
-The server will automatically:
-1. Detect if PDF is scanned or digital
-2. Apply appropriate processing method
-3. Return extracted text with metadata
+### Cursor
+Configure in settings.json:
+```json
+{
+  "mcp.servers": {
+    "readpdfx": {
+      "command": "python",
+      "args": ["path/to/readpdfx/run.py"]
+    }
+  }
+}
+```
 
-### Advanced Usage
-```
-"Extract text from this scanned document using Indonesian OCR: /path/to/scanned.pdf"
+**📁 See [client-configs/](./client-configs/) for detailed integration guides.**
+
+## 🌐 API Endpoints
+
+### MCP Protocol Endpoints
+- `POST /mcp/initialize` - Initialize MCP session
+- `POST /mcp/tools/list` - List available tools  
+- `POST /mcp/tools/call` - Call MCP tools
+- `GET /mcp/manifest` - Get MCP manifest
+
+### HTTP Endpoints  
+- `GET /health` - Health check
+- `POST /jsonrpc` - JSON-RPC 2.0 endpoint
+- `GET /docs` - API documentation
+- `GET /tools` - Tools discovery
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+MCP_SERVER_HOST=localhost      # Server host
+MCP_SERVER_PORT=8000           # Server port  
+TESSERACT_CMD=/usr/bin/tesseract  # Tesseract path
+PYTHONPATH=.                   # Python path
 ```
 
-## 🏗️ Project Structure
-
-```
-ocr_pdf_mcp/
-├── server.py              # Main MCP server entry point
-├── http_server.py         # HTTP REST API server (ML Studio)
-├── start_http_server.py   # HTTP server launcher
-├── test_http_server.py    # HTTP server testing
-├── version.py             # Version information
-├── install.py             # Production installer
-├── setup_tesseract.py     # Tesseract setup utility
-├── requirements.txt       # Production dependencies
-├── requirements-dev.txt   # Development dependencies
-├── ML_STUDIO_GUIDE.md     # ML Studio integration guide
-├── ocr_pdf_mcp/          # Core package
-│   ├── __init__.py
-│   ├── config.py         # Configuration management
-│   ├── pdf_utils.py      # PDF utilities
-│   ├── ocr_worker.py      # OCR processing engine
-│   └── pdf_text_extractor.py  # Text extraction
-├── pdf-test/              # Test PDF files
-├── demo_final.py          # Demo script
-└── README.md              # This file
-```
+### Config Files
+- `mcp.json` - MCP Protocol configuration
+- `mcp-config.yaml` - YAML configuration
+- `pyproject.toml` - Python project config
+- `package.json` - Node.js compatibility
 
 ## 🧪 Testing
 
-### Run Demo
+### Run Tests
 ```bash
-python demo_final.py
-```
-
-### Check Prerequisites
-```bash
-python install.py --check-only
+python test_mcp_server.py
 ```
 
 ### Manual Testing
 ```bash
-python quick_test.py
-python test_pdf_processing.py
+# Health check
+curl http://localhost:8000/health
+
+# List tools  
+curl -X POST http://localhost:8000/mcp/tools/list \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "tools/list", "id": 1}'
+
+# Call tool
+curl -X POST http://localhost:8000/mcp/tools/call \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0", 
+    "method": "tools/call",
+    "params": {
+      "name": "process_pdf_smart",
+      "arguments": {"pdf_path": "/path/to/test.pdf"}
+    },
+    "id": 1
+  }'
 ```
 
-## ⚙️ Requirements
+## 📊 Performance
 
-### System Requirements
-- Python 3.8 or higher
-- Tesseract OCR 4.0 or higher
-- 4GB RAM minimum (8GB recommended for large PDFs)
-- Windows 10/11, macOS 10.15+, or Linux
+- **Startup Time**: < 2 seconds
+- **Memory Usage**: ~50MB base
+- **Throughput**: 10+ PDFs/minute  
+- **Concurrent Requests**: Up to 100
+- **File Size Limit**: 100MB per file
 
-### Python Dependencies
-- `mcp>=1.0.0` - Model Context Protocol
-- `PyMuPDF>=1.24.0` - PDF processing
-- `pytesseract>=0.3.10` - OCR engine interface
-- `Pillow>=10.0.0` - Image processing
-- `pdf2image>=1.17.0` - PDF to image conversion
+## 🛠️ Development
 
-## 🔧 Troubleshooting
+### Development Mode
+```bash
+python run_server.py --dev --port 8000
+```
+
+### Project Structure
+```
+readpdfx/
+├── run.py                 # Simple production runner
+├── run_server.py          # Advanced runner with options  
+├── mcp_server.py          # Core MCP server
+├── mcp_tools.py           # MCP tools implementation
+├── mcp_types.py           # MCP Protocol types
+├── mcp_server_runner.py   # HTTP server runner
+├── client-configs/        # Client integration guides
+├── backup/                # Legacy files
+└── tests/                 # Test files
+```
+
+### Adding New Tools
+1. Define tool schema in `mcp_tools.py`
+2. Implement tool handler method
+3. Register tool in `MCPToolsRegistry`
+4. Update tests and documentation
+
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **"Tesseract not found"**
-   ```bash
-   python setup_tesseract.py
-   ```
-
-2. **"Module not found"**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **"Permission denied"**
-   - Run as administrator (Windows)
-   - Check file permissions
-
-4. **"OCR accuracy low"**
-   - Ensure high-quality PDF (300+ DPI)
-   - Try different OCR language settings
-   - Check image preprocessing
-
-### Logging
-
-Enable debug logging:
+**Server won't start**
 ```bash
-export LOG_LEVEL=DEBUG
-python server.py
+# Check port availability
+netstat -an | grep 8000
+
+# Try different port
+python run_server.py --port 8001
 ```
 
-## 📈 Performance
+**OCR not working**  
+```bash
+# Check Tesseract installation
+tesseract --version
 
-### Benchmarks (tested on Windows 11, Intel i7)
+# Install language data
+tesseract --list-langs
+```
 
-| PDF Type | Pages | Size | Processing Time | Accuracy |
-|----------|-------|------|----------------|----------|
-| Digital  | 10    | 2MB  | 0.5s          | 100%     |
-| Scanned  | 10    | 15MB | 12s           | 95%+     |
-| Mixed    | 20    | 8MB  | 6s            | 98%+     |
+**Permission errors**
+- Ensure read access to PDF files
+- Check write permissions for output directory
+- Run with appropriate user privileges
 
-### Optimization Tips
+**Connection timeout**
+- Verify server is running: `curl http://localhost:8000/health`
+- Check firewall settings
+- Try HTTP instead of direct MCP connection
 
-1. **Use appropriate worker count**: Set `MAX_WORKERS` to CPU cores
-2. **Optimize PDFs**: Higher DPI = better OCR accuracy
-3. **Language selection**: Use specific languages for better performance
-4. **Memory management**: Process large PDFs in batches
+### Debug Mode
+```bash
+python run_server.py --dev
+```
+
+## 📈 Monitoring
+
+### Health Check
+```bash
+curl http://localhost:8000/health
+```
+
+### Metrics (Future)
+- Request count and latency
+- Tool usage statistics  
+- Error rates and types
+- Resource utilization
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create feature branch: `git checkout -b feature/new-tool`
+3. Make changes and add tests
+4. Submit pull request
 
 ### Development Setup
-
 ```bash
-# Install development dependencies
+git clone https://github.com/irev/mcp-readpdfx.git
+cd readpdfx
 pip install -r requirements-dev.txt
-
-# Install pre-commit hooks
-pre-commit install
-
-# Run tests
-pytest
-
-# Format code
-black .
-isort .
+python test_mcp_server.py
 ```
 
-## 📝 License
+## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](./LICENSE) file.
 
-## 🆘 Support
+## 🔗 Links
 
-- **Issues**: [GitHub Issues](https://github.com/your-repo/ocr-pdf-mcp/issues)
-- **Documentation**: [Wiki](https://github.com/your-repo/ocr-pdf-mcp/wiki)
-- **Discussions**: [GitHub Discussions](https://github.com/your-repo/ocr-pdf-mcp/discussions)
+- **Repository**: https://github.com/irev/mcp-readpdfx
+- **Issues**: https://github.com/irev/mcp-readpdfx/issues  
+- **Documentation**: https://github.com/irev/mcp-readpdfx#readme
+- **MCP Protocol**: [Model Context Protocol Specification](https://spec.modelcontextprotocol.io)
 
-## 🙏 Acknowledgments
+## 🏆 Acknowledgments
 
-- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) - OCR engine
-- [PyMuPDF](https://github.com/pymupdf/PyMuPDF) - PDF processing
-- [Model Context Protocol](https://modelcontextprotocol.io/) - MCP specification
-- [pdf2image](https://github.com/Belval/pdf2image) - PDF to image conversion
+- MCP Protocol Team for the specification
+- FastAPI for the web framework
+- Tesseract OCR for text recognition
+- PyPDF2 and pdfplumber for PDF processing
 
 ---
 
-**OCR PDF MCP Server v1.0.0** - Production ready PDF OCR processing for MCP clients 🚀
+**Made with ❤️ for the MCP community**

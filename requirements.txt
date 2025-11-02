@@ -21,6 +21,7 @@ fastapi>=0.104.0
 uvicorn>=0.38.0
 python-multipart>=0.0.20
 requests>=2.31.0
+sse-starlette>=1.6.5
 uvicorn>=0.24.0
 
 # Development Dependencies (install with: pip install -r requirements-dev.txt)

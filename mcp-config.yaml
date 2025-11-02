@@ -1,0 +1,204 @@
+# MCP Server Configuration
+# MCP ReadPDFX Server v1.0.0 - Production Configuration
+
+mcp:
+  version: "2025-06-18"
+  name: "mcp-readpdfx"
+  description: "MCP server for OCR PDF processing with comprehensive text extraction and analysis"
+  
+server:
+  name: "MCP ReadPDFX Server"
+  version: "1.0.0"
+  host: "localhost"
+  port: 8000
+  debug: false
+  
+  # Server capabilities
+  capabilities:
+    tools:
+      listChanged: true
+    resources:
+      subscribe: false
+      listChanged: false
+    prompts:
+      listChanged: false
+    logging:
+      level: "info"
+
+# Transport configuration
+transport:
+  type: "http"
+  protocol: "json-rpc"
+  version: "2.0"
+  
+  endpoints:
+    initialize: "/mcp/initialize"
+    tools:
+      list: "/mcp/tools/list"
+      call: "/mcp/tools/call"
+    jsonrpc: "/jsonrpc"
+    health: "/health"
+    discovery: "/tools"
+    docs: "/docs"
+
+# OCR Configuration
+ocr:
+  engine: "tesseract"
+  default_language: "eng+ind"
+  default_dpi: 300
+  max_workers: 4
+  timeout: 300
+  
+  supported_languages:
+    - "eng"      # English
+    - "ind"      # Indonesian
+    - "eng+ind"  # English + Indonesian
+    - "fra"      # French
+    - "deu"      # German
+    - "spa"      # Spanish
+    - "ita"      # Italian
+    - "por"      # Portuguese
+    - "rus"      # Russian
+    - "chi_sim"  # Chinese Simplified
+    - "chi_tra"  # Chinese Traditional
+    - "jpn"      # Japanese
+    - "kor"      # Korean
+    - "ara"      # Arabic
+    - "hin"      # Hindi
+
+# PDF Processing Configuration  
+pdf:
+  max_file_size: "100MB"
+  supported_formats:
+    - "pdf"
+  text_density_threshold: 50  # Percentage threshold for OCR recommendation
+  preserve_layout: true
+  
+  processing_modes:
+    - "smart"         # Auto-detect best method
+    - "extract_only"  # Digital text extraction only
+    - "ocr_only"      # OCR processing only
+
+# Batch Processing Configuration
+batch:
+  max_files: 100
+  default_pattern: "*.pdf"
+  concurrent_jobs: 4
+  output_format: "txt"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  handlers:
+    - "console"
+    - "file"
+  
+  file:
+    path: "logs/mcp_server.log"
+    max_size: "10MB"
+    backup_count: 5
+
+# Security Configuration
+security:
+  cors:
+    enabled: true
+    allow_origins: ["*"]
+    allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers: ["*"]
+    allow_credentials: true
+  
+  rate_limiting:
+    enabled: false
+    requests_per_minute: 60
+
+# Performance Configuration
+performance:
+  max_concurrent_requests: 10
+  request_timeout: 300
+  keep_alive_timeout: 5
+  
+  cache:
+    enabled: false
+    ttl: 3600  # 1 hour
+    max_size: 1000
+
+# Monitoring Configuration
+monitoring:
+  health_check:
+    enabled: true
+    interval: 30  # seconds
+  
+  metrics:
+    enabled: false
+    prometheus_port: 9090
+  
+  profiling:
+    enabled: false
+
+# Development Configuration
+development:
+  hot_reload: false
+  auto_restart: false
+  debug_toolbar: false
+
+# Tools Configuration
+tools:
+  process_pdf_smart:
+    enabled: true
+    timeout: 300
+    max_retries: 3
+    
+  extract_pdf_text:
+    enabled: true
+    timeout: 60
+    max_retries: 2
+    
+  ocr_pdf_pages:
+    enabled: true
+    timeout: 600
+    max_retries: 2
+    
+  get_pdf_info:
+    enabled: true
+    timeout: 30
+    max_retries: 1
+    
+  batch_process_pdfs:
+    enabled: true
+    timeout: 1800  # 30 minutes
+    max_retries: 1
+
+# Environment Variables
+environment:
+  PYTHONPATH: "."
+  MCP_SERVER_HOST: "${server.host}"
+  MCP_SERVER_PORT: "${server.port}"
+  OCR_LANGUAGE: "${ocr.default_language}"
+  OCR_DPI: "${ocr.default_dpi}"
+  LOG_LEVEL: "${logging.level}"
+  DEBUG: "${server.debug}"
+
+# Deployment Configuration
+deployment:
+  docker:
+    image: "ocr-pdf-mcp:1.0.0"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./data:/app/data"
+      - "./logs:/app/logs"
+    environment:
+      - "MCP_SERVER_HOST=0.0.0.0"
+      - "MCP_SERVER_PORT=8000"
+  
+  kubernetes:
+    namespace: "mcp-servers"
+    replicas: 2
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"

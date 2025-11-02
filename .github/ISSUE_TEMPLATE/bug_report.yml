@@ -1,0 +1,136 @@
+name: Bug Report
+description: Create a report to help us improve ReadPDFx
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+
+  - type: input
+    id: version
+    attributes:
+      label: ReadPDFx Version
+      description: What version of ReadPDFx are you running?
+      placeholder: e.g., 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows 10
+        - Windows 11
+        - macOS (Intel)
+        - macOS (Apple Silicon)
+        - Ubuntu/Debian
+        - CentOS/RHEL
+        - Other Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      placeholder: e.g., 3.11.5
+    validations:
+      required: true
+
+  - type: dropdown
+    id: client
+    attributes:
+      label: MCP Client
+      description: Which MCP client are you using?
+      options:
+        - Claude Desktop
+        - LM Studio
+        - Continue.dev
+        - Cursor
+        - Custom HTTP client
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide detailed steps to reproduce the issue
+      placeholder: |
+        1. Start the server with `python run.py`
+        2. Connect with Claude Desktop
+        3. Try to process a PDF file
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-logs
+    attributes:
+      label: Error Logs
+      description: Please paste any relevant error logs or stack traces
+      render: shell
+
+  - type: textarea
+    id: pdf-details
+    attributes:
+      label: PDF File Details (if applicable)
+      description: If the issue is related to a specific PDF, please provide details
+      placeholder: |
+        - File size: 5MB
+        - Number of pages: 10
+        - Type: Scanned document
+        - Language: English
+        - Any special characteristics
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Configuration
+      description: Please share your MCP client configuration (remove sensitive info)
+      render: json
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please confirm you have done the following
+      options:
+        - label: I have searched existing issues to make sure this is not a duplicate
+          required: true
+        - label: I have provided all the required information above
+          required: true
+        - label: I have tested with the latest version of ReadPDFx
+          required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might be helpful
